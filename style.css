@@ -47,7 +47,6 @@ a {
 .add-cart {
     background-color: rgb(212, 206, 246);
     text-align: center;
-    padding: 10px 0px 0px;
     border: 1px solid black;
     border-radius: 5px;
 }
@@ -112,15 +111,14 @@ nav {
         box-sizing: content-box;
         border: 1px black solid;
         font-size: small;
-        width: 370px;
+        width: 350px;
     }
 
     .add-cart {
         background-color: rgba(128, 128, 128, 0.152);
         text-align: center;
-        padding: -5px;
         border: 1px solid black;
-        width: 75px;
+        width: 350px;
     }
 
     .responsive-sm {
