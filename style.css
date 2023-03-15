@@ -91,6 +91,17 @@ nav {
     background-color: #fdfff3;
 }
 
+.details-img{
+    width: 370px;
+    height: 265px;
+}
+
+.responsive-flex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
 
 @media (max-width: 576px) and (orientation: portrait) {
     .inline {
@@ -127,5 +138,21 @@ nav {
 
     .responsive-div {
         max-width: 65vw;
+    }
+
+    .responsive-flex {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
+    #div-checks {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .details-img{
+        width: 340px;
+        height: 235px;
     }
 }
