@@ -1,12 +1,29 @@
 //archivo propio de future-events.html
 
-let antesFilter = data.events.filter(events =>
-    (events.date > data.currentDate)
-);
-
+//implementación JSON
+fetch("https://mindhub-xj03.onrender.com/api/amazing")
+.then((response) => response.json())
+.then(eventos => {
+    //filtra el json por fecha
+    let antesFilter = eventos.events.filter(events =>
+        (events.date > eventos.currentDate)
+    );
+    //crea cartas desde el antesFilter
+    cartas(antesFilter)
+    //crea checkbox de categorias a partir del antesFilter
+    crearCheckboxes(antesFilter)
+    //combina dos funciones para crear un filtro avanzado
+    function filtro(){
+        let filtroTexto = filtraTexto(antesFilter, searchInput.value)
+        let filtroCategoria = filtrarCategory(filtroTexto)
+        cartas(filtroCategoria)
+    }
+    //llama a la función filtro para que funcione en la barra de busqueda y los checkbox
+    searchInput.addEventListener('input', filtro)
+    contenedorChecks.addEventListener('change', filtro)
+})
 
 //Implementacion DOM
-
 let contenedor = document.getElementById('contenedor'); //aclarando el contenedor que albergará las cards
 
 let cartas = (array) => {
@@ -29,9 +46,6 @@ let cartas = (array) => {
     contenedor.innerHTML = cartitas
 }
 
-cartas(antesFilter)
-
-
 //BARRA DE BUSQUEDA
 let searchInput = document.getElementById("barra-busqueda");
 
@@ -44,8 +58,8 @@ function filtraTexto (array, texto) {
 let contenedorChecks = document.getElementById("div-checks")
 
 function crearCheckboxes(array){
-    let arrayEventos = array.map(elemento => elemento.category) //crear arrayCategorias que analiza las categorias data.events.category
-    let setCategory = new Set(arrayEventos.sort((a,b)=>{ //acá ordena el set alfabeticamente
+    let arrayEventos = array.map(elemento => elemento.category)
+    let setCategory = new Set(arrayEventos.sort((a,b)=>{
         if(a<b){
             return -1
         }
@@ -64,8 +78,6 @@ function crearCheckboxes(array){
     contenedorChecks.innerHTML = checks
 }
 
-crearCheckboxes(antesFilter)
-
 function filtrarCategory(array){
     let checkboxes = document.querySelectorAll("input[type='checkbox']") //selecciona todos los input de checkbox
     let arrayChecks = Array.from(checkboxes) //crea una instancia de array segun mdn web docs
@@ -77,12 +89,3 @@ function filtrarCategory(array){
     let arrayFiltrado = array.filter(elemento => categories.includes(elemento.category))  //filtra el array que toma la funcion y la filtra por categoria 
     return arrayFiltrado
 }
-
-function filtro(){
-    let filtroTexto = filtraTexto(antesFilter, searchInput.value)
-    let filtroCategoria = filtrarCategory(filtroTexto)
-    cartas(filtroCategoria)
-}
-
-searchInput.addEventListener('input', filtro)
-contenedorChecks.addEventListener('change', filtro)

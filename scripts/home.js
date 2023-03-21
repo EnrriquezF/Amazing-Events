@@ -1,13 +1,29 @@
 //archivo propio de home.html aka. index.html
 
-//REEMPLAZO DE CARTAS DE EVENTOS ESTATICAS POR DINAMICAS
+//implementación JSON
+fetch("https://mindhub-xj03.onrender.com/api/amazing")
+.then((response) => response.json())
+.then(eventos => {
+    //crea cartas del json
+    cartas(eventos.events)
+    //crea checkbox de categorias a partir del json
+    crearCheckboxes(eventos.events)
+    //combina dos funciones para crear un filtro avanzado
+    function filtro(){
+        let filtroTexto = filtraTexto(eventos.events, searchInput.value)
+        let filtroCategoria = filtrarCategory(filtroTexto)
+        cartas(filtroCategoria)
+    }
+    //llama a la función filtro para que funcione en la barra de busqueda y los checkbox
+    searchInput.addEventListener('input', filtro)
+    contenedorChecks.addEventListener('change', filtro)
+})
 
 //Implementacion DOM
-
 let contenedor = document.getElementById('contenedor'); //aclarando el contenedor que albergará las cards
 
 let cartas = (array) => { //nuevo código con métodos de órden superior
-    let cartitas = ""
+    let cartitas = "";
     if(array.length==0) {
         cartitas += `<h2 class="text-center fw-bold my-5">There are no matches</h2>`
     }
@@ -26,21 +42,14 @@ let cartas = (array) => { //nuevo código con métodos de órden superior
     contenedor.innerHTML = cartitas
 }
 
-cartas(data.events)
-
 //BARRA DE BUSQUEDA
 let searchInput = document.getElementById("barra-busqueda");
-
-function filtraTexto (array, texto) {
-    let arrayFiltrado = array.filter(elemento => elemento.name.toLowerCase().includes(texto.toLowerCase()))
-    return arrayFiltrado
-}
 
 //CHECKBOXES (Los comentarios son para tratar de entender el proceso)
 let contenedorChecks = document.getElementById("div-checks")
 
 function crearCheckboxes(array){
-    let arrayEventos = array.map(elemento => elemento.category) //crear arrayCategorias que analiza las categorias data.events.category
+    let arrayEventos = array.map(elemento => elemento.category) //crear arrayCategorias que analiza las categorias events del json
     let setCategory = new Set(arrayEventos.sort((a,b)=>{ //acá ordena el set alfabeticamente
         if(a<b){
             return -1
@@ -60,8 +69,13 @@ function crearCheckboxes(array){
     contenedorChecks.innerHTML = checks
 }
 
-crearCheckboxes(data.events)
+//filtra texto a partir del json
+function filtraTexto (array, texto) {
+    let arrayFiltrado = array.filter(elemento => elemento.name.toLowerCase().includes(texto.toLowerCase()))
+    return arrayFiltrado
+}
 
+//filtrar las categorias de los checkbox a partir del json
 function filtrarCategory(array){
     let checkboxes = document.querySelectorAll("input[type='checkbox']") //selecciona todos los input de checkbox
     let arrayChecks = Array.from(checkboxes) //crea una instancia de array segun mdn web docs
@@ -73,12 +87,3 @@ function filtrarCategory(array){
     let arrayFiltrado = array.filter(elemento => categories.includes(elemento.category))  //filtra el array que toma la funcion y la filtra por categoria 
     return arrayFiltrado
 }
-
-function filtro(){
-    let filtroTexto = filtraTexto(data.events, searchInput.value)
-    let filtroCategoria = filtrarCategory(filtroTexto)
-    cartas(filtroCategoria)
-}
-
-searchInput.addEventListener('input', filtro)
-contenedorChecks.addEventListener('change', filtro)

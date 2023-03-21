@@ -93,13 +93,21 @@ nav {
 
 .details-img{
     width: 370px;
-    height: 265px;
+    height: 250px;
 }
 
 .responsive-flex {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+}
+
+.texto-h3{
+    color: rgb(62, 11, 87);
+}
+
+tbody{
+    background-color: #fcf1ff;
 }
 
 
